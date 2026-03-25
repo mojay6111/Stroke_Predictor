@@ -11,10 +11,6 @@ from flask_mysqldb import MySQL
 # Load secrets from .env (ignored by Git)
 load_dotenv()
 
-# ── Model ──────────────────────────────────────────────────────────────────────
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'model.pkl')
-model = pickle.load(open(MODEL_PATH, 'rb'))
-
 # ── App setup ──────────────────────────────────────────────────────────────────
 app = Flask(__name__)
 
@@ -32,8 +28,12 @@ mail = Mail(app)
 app.config['MYSQL_HOST']     = os.getenv('MYSQL_HOST', 'localhost')
 app.config['MYSQL_USER']     = os.getenv('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', '')
-app.config['MYSQL_DB']       = os.getenv('MYSQL_DB', 'user-system')
+app.config['MYSQL_DB']       = os.getenv('MYSQL_DB', 'stroke_predictor')
 mysql = MySQL(app)
+
+# ── Model (loaded after app so it is in scope for all routes) ──────────────────
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'models.pkl')
+model = pickle.load(open(MODEL_PATH, 'rb'))
 
 # ── Routes ─────────────────────────────────────────────────────────────────────
 
@@ -111,21 +111,24 @@ def logout():
 
 @app.route('/result', methods=['POST'])
 def result():
-    features = [
-        request.form.get('gender'),
-        request.form.get('age'),
-        request.form.get('hypertension'),
-        request.form.get('heart_disease'),
-        request.form.get('ever_married'),
-        request.form.get('work_type'),
-        request.form.get('Residence_type'),
-        request.form.get('avg_glucose_level'),
-        request.form.get('bmi'),
-        request.form.get('smoking_status'),
-    ]
+    try:
+        features = [
+            float(request.form.get('gender', 0)),
+            float(request.form.get('age', 0)),
+            float(request.form.get('hypertension', 0)),
+            float(request.form.get('heart_disease', 0)),
+            float(request.form.get('ever_married', 0)),
+            float(request.form.get('work_type', 0)),
+            float(request.form.get('Residence_type', 0)),
+            float(request.form.get('avg_glucose_level', 0)),
+            float(request.form.get('bmi', 0)),
+            float(request.form.get('smoking_status', 0)),
+        ]
+    except ValueError:
+        return render_template('home.html', error='Please fill in all fields with valid numbers.')
 
     x = np.array(features).reshape(1, -1)
-    proba = model.predict_proba(x)[0][1]          # float between 0 and 1
+    proba = model.predict_proba(x)[0][1]
     percentage = f'{proba * 100:.1f}%'
 
     if proba > 0.5:

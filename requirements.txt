@@ -1,0 +1,22 @@
+# Web framework
+flask==2.2.5
+flask-mail==0.9.1
+flask-mysqldb==1.0.1
+
+# ML & data
+scikit-learn==1.1.3
+numpy==1.23.5
+pandas==1.5.3
+joblib==1.2.0
+
+# Notebooks
+jupyter==1.0.0
+ipykernel==6.19.2
+matplotlib==3.6.3
+seaborn==0.12.2
+
+# Config
+python-dotenv==1.0.0
+
+# Production server (Heroku)
+gunicorn==20.1.0
