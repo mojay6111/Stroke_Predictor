@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}My Profile — iStrokePredictor{% endblock %}
+
+{% block content %}
+<div class="page" style="background:var(--off-white);min-height:calc(100vh - var(--nav-h))">
+  <div style="max-width:900px;margin:0 auto;padding:3rem 1.5rem">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div style="display:flex;align-items:center;gap:1.25rem">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.75rem;color:var(--white)">
+          {{ session.name[0].upper() }}
+        </div>
+        <div>
+          <h1 style="font-family:var(--font-display);font-size:1.75rem;color:var(--navy)">{{ session.name }}</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem">{{ user.email }}</p>
+        </div>
+      </div>
+      <a href="{{ url_for('profile_edit') }}" class="btn btn-outline">Edit profile</a>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem">
+      <div class="card">
+        <div class="card-body" style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.25rem;color:var(--navy)">{{ total }}</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">Total assessments</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.25rem;color:var(--coral)">{{ high_count }}</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">High risk results</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.25rem;color:var(--success)">{{ total - high_count }}</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">Low risk results</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.25rem;color:var(--navy)">
+            {{ user.age if user.age else '—' }}
+          </div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">Age on profile</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+
+      <!-- Personal details card -->
+      <div class="card">
+        <div style="padding:1.5rem 1.75rem;border-bottom:1px solid var(--border)">
+          <h2 style="font-size:1rem;font-weight:600;color:var(--navy)">Personal details</h2>
+        </div>
+        <div style="padding:1.5rem 1.75rem">
+          <table style="width:100%;border-collapse:collapse">
+            {% for label, value in [
+              ('Name', user.name),
+              ('Email', user.email),
+              ('Gender', user.gender or '—'),
+              ('Age', (user.age|string + ' years') if user.age else '—'),
+              ('Phone', user.phone or '—'),
+              ('Member since', user.created_at.strftime('%B %Y') if user.created_at else '—')
+            ] %}
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:0.75rem 0;font-size:0.85rem;color:var(--text-muted);width:45%">{{ label }}</td>
+              <td style="padding:0.75rem 0;font-size:0.9rem;font-weight:500;color:var(--navy)">{{ value }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          <a href="{{ url_for('profile_edit') }}" class="btn btn-outline" style="margin-top:1.25rem;font-size:0.85rem;padding:0.5rem 1rem">
+            Update details
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent assessments -->
+      <div class="card">
+        <div style="padding:1.5rem 1.75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <h2 style="font-size:1rem;font-weight:600;color:var(--navy)">Recent assessments</h2>
+          <a href="{{ url_for('history') }}" style="font-size:0.82rem;color:var(--coral);font-weight:600">View all →</a>
+        </div>
+        <div style="padding:1.25rem 1.75rem">
+          {% if recent %}
+            {% for a in recent %}
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)">
+              <div>
+                <div style="font-size:0.9rem;font-weight:500;color:var(--navy)">
+                  {{ a.stroke_probability }}% probability
+                </div>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.1rem">
+                  {{ a.assessed_at.strftime('%d %b %Y, %H:%M') }}
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem">
+                <span style="font-size:0.78rem;font-weight:600;padding:0.25rem 0.65rem;border-radius:100px;
+                  background:{% if a.risk_level == 'high' %}#fff0ee;color:var(--coral){% else %}var(--success-bg);color:var(--success){% endif %}">
+                  {{ a.risk_level|upper }}
+                </span>
+                <a href="{{ url_for('result_pdf', assessment_id=a.id) }}" title="Download PDF"
+                   style="color:var(--text-muted);font-size:1rem">⬇</a>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div style="text-align:center;padding:2rem 0;color:var(--text-muted)">
+              <div style="font-size:2rem;margin-bottom:0.75rem">📋</div>
+              <p style="font-size:0.9rem">No assessments yet</p>
+              <a href="{{ url_for('predict') }}" class="btn btn-primary" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1.25rem">Take assessment</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div style="margin-top:1.5rem;background:var(--navy);border-radius:var(--radius-lg);padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <h3 style="font-family:var(--font-display);color:var(--white);font-size:1.3rem">Ready for a new assessment?</h3>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:0.25rem">Track how your risk changes over time.</p>
+      </div>
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">Start assessment →</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

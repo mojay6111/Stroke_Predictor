@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Assessment History — iStrokePredictor{% endblock %}
+
+{% block content %}
+<div class="page" style="background:var(--off-white);min-height:calc(100vh - var(--nav-h))">
+  <div style="max-width:900px;margin:0 auto;padding:3rem 1.5rem">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <a href="{{ url_for('profile') }}" style="font-size:0.85rem;color:var(--text-muted)">← Back to profile</a>
+        <h1 style="font-family:var(--font-display);font-size:1.75rem;color:var(--navy);margin-top:0.5rem">Assessment history</h1>
+        <p style="color:var(--text-muted);font-size:0.9rem">{{ assessments|length }} total assessment{{ 's' if assessments|length != 1 }}</p>
+      </div>
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">New assessment →</a>
+    </div>
+
+    {% if assessments %}
+      <div class="card">
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:var(--off-white)">
+                {% for col in ['Date', 'Age', 'BMI', 'Glucose', 'Hypertension', 'Heart Disease', 'Smoking', 'Probability', 'Risk', 'Report'] %}
+                <th style="padding:0.85rem 1rem;text-align:left;font-size:0.78rem;font-weight:600;color:var(--text-muted);letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border)">
+                  {{ col }}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in assessments %}
+              <tr style="border-bottom:1px solid var(--border);transition:background .15s"
+                  onmouseover="this.style.background='var(--off-white)'"
+                  onmouseout="this.style.background=''">
+                <td style="padding:1rem;font-size:0.85rem;white-space:nowrap;color:var(--text-muted)">
+                  {{ a.assessed_at.strftime('%d %b %Y') }}<br>
+                  <span style="font-size:0.75rem">{{ a.assessed_at.strftime('%H:%M') }}</span>
+                </td>
+                <td style="padding:1rem;font-size:0.9rem;color:var(--navy)">{{ a.age or '—' }}</td>
+                <td style="padding:1rem;font-size:0.9rem;color:var(--navy)">{{ a.bmi or '—' }}</td>
+                <td style="padding:1rem;font-size:0.9rem;color:var(--navy)">{{ a.avg_glucose_level or '—' }}</td>
+                <td style="padding:1rem;font-size:0.9rem;color:var(--navy)">{{ 'Yes' if a.hypertension == 1 else 'No' }}</td>
+                <td style="padding:1rem;font-size:0.9rem;color:var(--navy)">{{ 'Yes' if a.heart_disease == 1 else 'No' }}</td>
+                <td style="padding:1rem;font-size:0.85rem;color:var(--navy)">{{ a.smoking_status or '—' }}</td>
+                <td style="padding:1rem">
+                  <div style="font-family:var(--font-display);font-size:1.1rem;color:{% if a.risk_level == 'high' %}var(--coral){% else %}var(--success){% endif %}">
+                    {{ a.stroke_probability }}%
+                  </div>
+                </td>
+                <td style="padding:1rem">
+                  <span style="font-size:0.78rem;font-weight:600;padding:0.3rem 0.7rem;border-radius:100px;
+                    {% if a.risk_level == 'high' %}background:#fff0ee;color:var(--coral){% else %}background:var(--success-bg);color:var(--success){% endif %}">
+                    {{ a.risk_level|upper }}
+                  </span>
+                </td>
+                <td style="padding:1rem">
+                  <a href="{{ url_for('result_pdf', assessment_id=a.id) }}"
+                     class="btn btn-outline"
+                     style="font-size:0.78rem;padding:0.35rem 0.75rem;white-space:nowrap">
+                    ⬇ PDF
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% else %}
+      <div class="card">
+        <div class="card-body" style="text-align:center;padding:4rem 2rem">
+          <div style="font-size:3rem;margin-bottom:1rem">📋</div>
+          <h3 style="font-family:var(--font-display);color:var(--navy);margin-bottom:0.5rem">No assessments yet</h3>
+          <p style="color:var(--text-muted);margin-bottom:1.5rem">Your assessment history will appear here after you complete your first prediction.</p>
+          <a href="{{ url_for('predict') }}" class="btn btn-primary">Take your first assessment →</a>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

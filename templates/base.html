@@ -10,16 +10,15 @@
 <body>
 
 <nav class="navbar">
-  <a class="navbar-brand" href="{{ url_for('index') }}">
-    i<span>Stroke</span>Predictor
-  </a>
+  <a class="navbar-brand" href="{{ url_for('index') }}">i<span>Stroke</span>Predictor</a>
   <button class="navbar-toggle" onclick="toggleNav()" aria-label="Menu">&#9776;</button>
   <div class="navbar-links" id="navLinks">
     <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('fast') }}">F.A.S.T</a>
     <a href="{{ url_for('manage') }}">Prevention</a>
     {% if session.get('loggedin') %}
-      <span style="color:rgba(255,255,255,0.5);font-size:0.9rem;padding:0 0.5rem;">{{ session.name }}</span>
+      <a href="{{ url_for('profile') }}">Profile</a>
+      <a href="{{ url_for('history') }}">History</a>
       <a href="{{ url_for('logout') }}" class="btn-nav-primary">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>

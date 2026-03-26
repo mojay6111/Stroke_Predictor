@@ -13,7 +13,6 @@ build/
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
 
 
 healthcare-dataset-stroke-data.csv
@@ -36,3 +35,19 @@ Thumbs.db
 # Model versioning — keep only the canonical file in models/
 # (remove this if you want to track model files in Git)
 *.pickle
+
+
+# Models and data (large binary files)
+models/
+data/
+
+# Login CSS remnants
+static/css/login.css
+static/css/style copy.css
+static/css/jquery-ui.css
+
+# Leftover files from other projects
+index.html
+success.html
+app.py.ipynb
+env.example

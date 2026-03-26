@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #0a1628;
+      background: #ffffff;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: #0a1628;
+      color: white;
+      padding: 2.5rem 2.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .brand {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 22pt;
+      color: white;
+    }
+    .brand span { color: #e85d4a; }
+    .brand-sub { font-size: 9pt; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
+    .report-meta { text-align: right; font-size: 9pt; color: rgba(255,255,255,0.6); line-height: 1.8; }
+
+    /* Result banner */
+    .result-banner {
+      padding: 1.75rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .result-banner.high { background: #fff0ee; border-left: 5px solid #e85d4a; }
+    .result-banner.low  { background: #edfaf4; border-left: 5px solid #1a936f; }
+    .result-label {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 18pt;
+    }
+    .result-label.high { color: #e85d4a; }
+    .result-label.low  { color: #1a936f; }
+    .result-prob-wrap { text-align: right; }
+    .result-prob-num {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 28pt;
+    }
+    .result-prob-num.high { color: #e85d4a; }
+    .result-prob-num.low  { color: #1a936f; }
+    .result-prob-label { font-size: 9pt; color: #6b7a99; }
+
+    /* Sections */
+    .body { padding: 2rem 2.5rem; }
+
+    h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 13pt;
+      color: #0a1628;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .section { margin-bottom: 2rem; }
+
+    /* Grid tables */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+    .grid-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      background: #f7f8fc;
+      border-radius: 6px;
+      font-size: 10pt;
+    }
+    .grid-row .label { color: #6b7a99; }
+    .grid-row .value { font-weight: 600; color: #0a1628; }
+
+    /* Risk indicators */
+    .risk-row {
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.4rem;
+      font-size: 10pt;
+    }
+    .risk-row .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-right: 0.65rem;
+      flex-shrink: 0;
+    }
+    .risk-row.present { background: #fff0ee; }
+    .risk-row.present .dot { background: #e85d4a; }
+    .risk-row.absent  { background: #edfaf4; }
+    .risk-row.absent  .dot { background: #1a936f; }
+
+    /* Prob bar */
+    .prob-bar-wrap {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 100px;
+      overflow: hidden;
+      margin: 0.5rem 0 0.25rem;
+    }
+    .prob-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+    }
+    .prob-bar-fill.high { background: #e85d4a; }
+    .prob-bar-fill.low  { background: #1a936f; }
+
+    /* Tips */
+    .tip {
+      display: flex;
+      gap: 0.65rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 10pt;
+    }
+    .tip:last-child { border-bottom: none; }
+    .tip-arrow { color: #e85d4a; font-weight: 700; flex-shrink: 0; }
+
+    /* Disclaimer */
+    .disclaimer {
+      background: #f7f8fc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 9pt;
+      color: #6b7a99;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0a1628;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 1rem;
+      font-size: 8.5pt;
+      margin-top: 2rem;
+    }
+    .footer span { color: #e85d4a; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="brand">i<span>Stroke</span>Predictor</div>
+      <div class="brand-sub">Stroke Risk Assessment Report</div>
+    </div>
+    <div class="report-meta">
+      <div>Report generated</div>
+      <div style="color:white">{{ generated_at }}</div>
+      <div style="margin-top:0.5rem">Assessment #{{ assessment.id }}</div>
+    </div>
+  </div>
+
+  <!-- Result banner -->
+  <div class="result-banner {{ assessment.risk_level }}">
+    <div>
+      <div class="result-label {{ assessment.risk_level }}">
+        {% if assessment.risk_level == 'high' %}⚠ Elevated Stroke Risk{% else %}✓ Low Stroke Risk{% endif %}
+      </div>
+      <div style="font-size:10pt;color:#6b7a99;margin-top:0.25rem">
+        Assessed on {{ assessment.assessed_at.strftime('%B %d, %Y at %H:%M') }}
+      </div>
+    </div>
+    <div class="result-prob-wrap">
+      <div class="result-prob-num {{ assessment.risk_level }}">{{ assessment.stroke_probability }}%</div>
+      <div class="result-prob-label">stroke probability</div>
+      <div class="prob-bar-wrap" style="width:120px">
+        <div class="prob-bar-fill {{ assessment.risk_level }}"
+             style="width:{{ assessment.stroke_probability }}%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- Patient info -->
+    <div class="section">
+      <h2>Patient information</h2>
+      <div class="grid-2">
+        <div class="grid-row"><span class="label">Name</span><span class="value">{{ assessment.name }}</span></div>
+        <div class="grid-row"><span class="label">Email</span><span class="value">{{ assessment.email }}</span></div>
+        <div class="grid-row"><span class="label">Age</span><span class="value">{{ assessment.age or '—' }} years</span></div>
+        <div class="grid-row"><span class="label">Gender</span><span class="value">{{ assessment.gender or '—' }}</span></div>
+        <div class="grid-row"><span class="label">Residence</span><span class="value">{{ assessment.residence_type or '—' }}</span></div>
+        <div class="grid-row"><span class="label">Marital status</span><span class="value">{{ 'Married' if assessment.ever_married == 'Yes' else 'Single' }}</span></div>
+      </div>
+    </div>
+
+    <!-- Clinical inputs -->
+    <div class="section">
+      <h2>Clinical inputs used for assessment</h2>
+      <div class="grid-2">
+        <div class="grid-row"><span class="label">Avg glucose level</span><span class="value">{{ assessment.avg_glucose_level }} mg/dL</span></div>
+        <div class="grid-row"><span class="label">BMI</span><span class="value">{{ assessment.bmi }} kg/m²</span></div>
+        <div class="grid-row"><span class="label">Work type</span><span class="value">{{ assessment.work_type or '—' }}</span></div>
+        <div class="grid-row"><span class="label">Smoking status</span><span class="value">{{ assessment.smoking_status or '—' }}</span></div>
+      </div>
+    </div>
+
+    <!-- Risk factors -->
+    <div class="section">
+      <h2>Risk factor breakdown</h2>
+      <div class="risk-row {% if assessment.hypertension == 1 %}present{% else %}absent{% endif %}">
+        <div class="dot"></div>
+        <div>
+          <strong>Hypertension (High Blood Pressure)</strong> —
+          {% if assessment.hypertension == 1 %}Present — significant stroke risk factor{% else %}Not present{% endif %}
+        </div>
+      </div>
+      <div class="risk-row {% if assessment.heart_disease == 1 %}present{% else %}absent{% endif %}">
+        <div class="dot"></div>
+        <div>
+          <strong>Heart Disease</strong> —
+          {% if assessment.heart_disease == 1 %}Present — increases clot risk{% else %}Not present{% endif %}
+        </div>
+      </div>
+      <div class="risk-row {% if assessment.avg_glucose_level > 125 %}present{% else %}absent{% endif %}">
+        <div class="dot"></div>
+        <div>
+          <strong>Elevated Glucose ({{ assessment.avg_glucose_level }} mg/dL)</strong> —
+          {% if assessment.avg_glucose_level > 125 %}Above normal range (>125 mg/dL){% else %}Within normal range{% endif %}
+        </div>
+      </div>
+      <div class="risk-row {% if assessment.bmi > 30 %}present{% else %}absent{% endif %}">
+        <div class="dot"></div>
+        <div>
+          <strong>BMI ({{ assessment.bmi }} kg/m²)</strong> —
+          {% if assessment.bmi > 30 %}Obese range — higher cardiovascular risk{% elif assessment.bmi > 25 %}Overweight range{% else %}Normal range{% endif %}
+        </div>
+      </div>
+      <div class="risk-row {% if assessment.smoking_status == 'smokes' %}present{% elif assessment.smoking_status == 'formerly smoked' %}present{% else %}absent{% endif %}">
+        <div class="dot"></div>
+        <div>
+          <strong>Smoking ({{ assessment.smoking_status }})</strong> —
+          {% if assessment.smoking_status == 'smokes' %}Active smoker — significantly raises risk
+          {% elif assessment.smoking_status == 'formerly smoked' %}Former smoker — residual elevated risk
+          {% else %}Non-smoker — lower risk{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="section">
+      <h2>Personalised recommendations</h2>
+      {% for tip in tips %}
+      <div class="tip">
+        <span class="tip-arrow">→</span>
+        <span>{{ tip }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <strong>Medical disclaimer:</strong> This report is generated by an AI-based predictive model trained on clinical data and is intended for informational purposes only. It does not constitute a medical diagnosis. The probability score reflects statistical risk based on the inputs provided and should not be used as a substitute for professional medical advice, examination, or diagnosis. If you have concerns about your health, please consult a qualified healthcare professional.
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>Generated by <span>iStrokePredictor</span> · Stroke risk assessment powered by machine learning · Not a substitute for medical advice</p>
+  </div>
+
+</body>
+</html>

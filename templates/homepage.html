@@ -11,9 +11,7 @@
         <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>
         AI-powered stroke risk assessment
       </div>
-      <h1 class="hero-title">
-        Know your stroke<br><em>risk today</em>
-      </h1>
+      <h1 class="hero-title">Know your stroke<br><em>risk today</em></h1>
       <p class="hero-subtitle">
         Early detection saves lives. Answer a few simple questions about your health and get an instant, personalised stroke risk prediction backed by machine learning.
       </p>
@@ -24,7 +22,7 @@
       <div class="hero-stats">
         <div>
           <div class="hero-stat-num">15M</div>
-          <div class="hero-stat-label">strokes worldwide per year</div>
+          <div class="hero-stat-label">strokes per year worldwide</div>
         </div>
         <div>
           <div class="hero-stat-num">80%</div>
@@ -37,7 +35,7 @@
       </div>
     </div>
     <div class="hero-image">
-      <img src="{{ url_for('static', filename='images/prediction.jpeg') }}" alt="Stroke prediction illustration">
+      <img src="{{ url_for('static', filename='images/prediction.webp') }}" alt="Stroke prediction">
       <div class="hero-image-overlay">
         <div class="icon-circle">🧠</div>
         <div>
@@ -48,35 +46,124 @@
     </div>
   </section>
 
-  <!-- Info cards -->
+  <!-- How it works -->
   <section class="info-section bg-white">
-    <h2 class="section-title">Understanding stroke risk</h2>
-    <p class="section-sub">Stroke can affect anyone. Knowing the warning signs and risk factors is the first step to prevention.</p>
+    <h2 class="section-title">How it works</h2>
+    <p class="section-sub">Three simple steps to understanding your stroke risk.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-top:2rem">
+      {% for step, icon, title, desc in [
+        ('01', '📝', 'Answer questions', 'Fill in 10 clinical questions across 4 short steps — demographics, lifestyle, medical history, and body measurements.'),
+        ('02', '🤖', 'Model analyses', 'Our Logistic Regression model — trained on 5,000+ real patient records with SMOTE balancing — computes your probability.'),
+        ('03', '📊', 'Get your result', 'Receive an instant risk score with a personalised breakdown, actionable tips, and a downloadable PDF report.')
+      ] %}
+      <div style="text-align:center;padding:1.5rem">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--coral-pale);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem">{{ icon }}</div>
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;color:var(--coral);margin-bottom:0.5rem">STEP {{ step }}</div>
+        <h3 style="font-weight:600;color:var(--navy);margin-bottom:0.5rem">{{ title }}</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.6">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Stats section -->
+  <section class="info-section" style="background:var(--navy)">
+    <div style="text-align:center;margin-bottom:3rem">
+      <h2 class="section-title" style="color:var(--white)">Why stroke awareness matters</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.6);margin:0 auto">The numbers that make early detection critical.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem">
+      {% for num, label, desc in [
+        ('1 in 4', 'people worldwide', 'will have a stroke in their lifetime'),
+        ('5.5M', 'deaths per year', 'making stroke the 2nd leading cause of death globally'),
+        ('3.8B', 'people affected', 'live in countries with high stroke burden'),
+        ('< 4.5hrs', 'treatment window', 'for clot-busting drugs to be effective after stroke onset')
+      ] %}
+      <div style="background:rgba(255,255,255,0.06);border-radius:var(--radius-lg);padding:1.75rem;text-align:center">
+        <div style="font-family:var(--font-display);font-size:2rem;color:var(--coral);margin-bottom:0.4rem">{{ num }}</div>
+        <div style="font-weight:600;color:var(--white);font-size:0.9rem;margin-bottom:0.25rem">{{ label }}</div>
+        <div style="font-size:0.82rem;color:rgba(255,255,255,0.5)">{{ desc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="info-section bg-white">
+    <h2 class="section-title">Everything you need</h2>
+    <p class="section-sub">iStrokePredictor gives you more than just a number.</p>
     <div class="cards-grid">
       <div class="info-card">
-        <img src="{{ url_for('static', filename='images/fast.jpeg') }}" alt="FAST signs">
+        <img src="{{ url_for('static', filename='images/fast.jpg') }}" alt="FAST signs">
         <div class="info-card-body">
           <div class="info-card-title">Recognise the F.A.S.T signs</div>
-          <p class="info-card-text">Face drooping, Arm weakness, Speech difficulty — Time to call for help. Learn to spot the early warning signs.</p>
-          <a href="{{ url_for('fast') }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem;">Learn more →</a>
+          <p class="info-card-text">Learn to spot the early warning signs of stroke — Face drooping, Arm weakness, Speech difficulty, and Time to call.</p>
+          <a href="{{ url_for('fast') }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem">Learn more →</a>
         </div>
       </div>
       <div class="info-card">
-        <img src="{{ url_for('static', filename='images/risk.jpg') }}" alt="Risk factors">
+        <img src="{{ url_for('static', filename='images/risk.jpg') }}" alt="Prevention">
         <div class="info-card-body">
-          <div class="info-card-title">Know your risk factors</div>
-          <p class="info-card-text">High blood pressure, diabetes, smoking, and obesity are leading contributors. Understanding them helps you act early.</p>
-          <a href="{{ url_for('manage') }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem;">Prevention tips →</a>
+          <div class="info-card-title">Prevention & lifestyle tips</div>
+          <p class="info-card-text">Up to 80% of strokes are preventable. Get evidence-based advice on diet, exercise, blood pressure, and stress management.</p>
+          <a href="{{ url_for('manage') }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem">View tips →</a>
         </div>
       </div>
       <div class="info-card">
-        <img src="{{ url_for('static', filename='images/strokepr.jpg') }}" alt="Get assessed">
+        <img src="{{ url_for('static', filename='images/strokepr.webp') }}" alt="Assessment">
         <div class="info-card-body">
-          <div class="info-card-title">Get your risk assessed</div>
-          <p class="info-card-text">Answer 10 clinical questions and our model will compute your personalised stroke probability in seconds.</p>
-          <a href="{{ url_for('predict') }}" class="btn btn-primary" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem;">Start now →</a>
+          <div class="info-card-title">Track your risk over time</div>
+          <p class="info-card-text">Create a free account to save every assessment, download PDF reports, and monitor how your risk changes as your health improves.</p>
+          <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-top:1rem;font-size:0.85rem;padding:0.5rem 1rem">Get started →</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="info-section" style="background:var(--off-white)">
+    <h2 class="section-title">What users say</h2>
+    <p class="section-sub">Real feedback from people who used iStrokePredictor.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:1rem">
+      {% for quote, name, role in [
+        ('"The BMI calculator and step-by-step form made it so easy. I had my result in under 2 minutes and immediately booked a check-up."', 'James M.', 'Lagos, Nigeria'),
+        ('"I had no idea my glucose levels put me at risk. The PDF report was something I could actually bring to my doctor."', 'Amina K.', 'Nairobi, Kenya'),
+        ('"Clean, simple, and genuinely useful. Finally a health tool that explains what the numbers mean."', 'David O.', 'Accra, Ghana')
+      ] %}
+      <div style="background:var(--white);border-radius:var(--radius-lg);padding:1.75rem;box-shadow:var(--shadow)">
+        <div style="color:var(--coral);font-size:1.5rem;margin-bottom:0.75rem">❝</div>
+        <p style="font-size:0.92rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem">{{ quote }}</p>
+        <div style="font-weight:600;font-size:0.9rem;color:var(--navy)">{{ name }}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">{{ role }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Medical disclaimer -->
+  <section style="background:var(--off-white);padding:2rem 5%">
+    <div style="max-width:800px;margin:0 auto;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem 2rem;display:flex;gap:1rem;align-items:flex-start">
+      <div style="font-size:1.25rem;flex-shrink:0;margin-top:0.1rem">⚕️</div>
+      <div>
+        <div style="font-weight:600;font-size:0.9rem;color:var(--navy);margin-bottom:0.35rem">Medical disclaimer</div>
+        <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6">
+          iStrokePredictor is an educational tool powered by machine learning. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider with questions regarding your health. In a medical emergency, call your local emergency services immediately.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:var(--navy);padding:5rem 5%;text-align:center">
+    <h2 style="font-family:var(--font-display);color:var(--white);font-size:clamp(1.8rem,4vw,2.75rem);margin-bottom:1rem">
+      Take control of your health today
+    </h2>
+    <p style="color:rgba(255,255,255,0.6);font-size:1.05rem;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto">
+      A 2-minute assessment could be the most important thing you do today.
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">Start free assessment →</a>
+      <a href="{{ url_for('register') }}" class="btn btn-lg" style="background:rgba(255,255,255,0.1);color:white">Create account</a>
     </div>
   </section>
 

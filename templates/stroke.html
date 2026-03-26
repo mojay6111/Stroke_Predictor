@@ -7,27 +7,35 @@
     <div class="result-card-top">
       <div class="result-icon risk-icon">⚠️</div>
       <h1 class="result-title risk">Elevated stroke risk</h1>
-      <p class="result-prob">{{ pred }}</p>
+      <p class="result-prob">Probability: <strong>{{ percentage }}</strong></p>
       <div class="prob-bar-wrap">
         <div class="prob-bar risk" id="probBar" style="width:0%"></div>
       </div>
-      <p class="result-message" style="margin-top:0.5rem">
+      <p class="result-message" style="margin-top:0.75rem">
         Your inputs suggest an elevated stroke risk. This is not a diagnosis — please consult a qualified healthcare professional as soon as possible.
       </p>
+      {% if assessment_id %}
+      <a href="{{ url_for('result_pdf', assessment_id=assessment_id) }}"
+         class="btn btn-outline" style="margin-top:1.25rem;font-size:0.9rem">
+        ⬇ Download PDF report
+      </a>
+      {% endif %}
     </div>
     <div class="result-card-bottom">
       <h3>Recommended next steps</h3>
       <ul class="tips-list">
-        <li>Schedule an appointment with your doctor immediately</li>
-        <li>Have your blood pressure and glucose checked professionally</li>
-        <li>Discuss your risk factors and medical history with a specialist</li>
-        <li>Make lifestyle changes: quit smoking, reduce salt, exercise more</li>
-        <li>Learn to recognise the F.A.S.T warning signs of stroke</li>
+        {% for tip in tips %}
+        <li>{{ tip }}</li>
+        {% endfor %}
       </ul>
     </div>
     <div class="result-actions">
       <a href="{{ url_for('predict') }}" class="btn btn-outline">Take assessment again</a>
-      <a href="{{ url_for('fast') }}" class="btn btn-primary">Learn F.A.S.T signs →</a>
+      {% if session.get('loggedin') %}
+      <a href="{{ url_for('history') }}" class="btn btn-primary">View history →</a>
+      {% else %}
+      <a href="{{ url_for('register') }}" class="btn btn-primary">Save results →</a>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -36,13 +44,9 @@
 {% block scripts %}
 <script>
   window.addEventListener('load', function() {
-    const pred = "{{ pred }}";
-    const match = pred.match(/([\d.]+)%/);
-    if (match) {
-      setTimeout(() => {
-        document.getElementById('probBar').style.width = match[1] + '%';
-      }, 300);
-    }
+    setTimeout(() => {
+      document.getElementById('probBar').style.width = '{{ proba }}%';
+    }, 300);
   });
 </script>
 {% endblock %}
