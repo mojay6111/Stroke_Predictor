@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}iStrokePredictor{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="navbar-brand" href="{{ url_for('index') }}">
+    i<span>Stroke</span>Predictor
+  </a>
+  <button class="navbar-toggle" onclick="toggleNav()" aria-label="Menu">&#9776;</button>
+  <div class="navbar-links" id="navLinks">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('fast') }}">F.A.S.T</a>
+    <a href="{{ url_for('manage') }}">Prevention</a>
+    {% if session.get('loggedin') %}
+      <span style="color:rgba(255,255,255,0.5);font-size:0.9rem;padding:0 0.5rem;">{{ session.name }}</span>
+      <a href="{{ url_for('logout') }}" class="btn-nav-primary">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}" class="btn-nav-primary">Get Started</a>
+    {% endif %}
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+  <p>&copy; 2024 <span>iStrokePredictor</span>. Built with care for better health outcomes.</p>
+</footer>
+
+<script>
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+window.addEventListener('click', function(e) {
+  const nav = document.getElementById('navLinks');
+  const toggle = document.querySelector('.navbar-toggle');
+  if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+    nav.classList.remove('open');
+  }
+});
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

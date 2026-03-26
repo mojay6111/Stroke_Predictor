@@ -1,61 +1,49 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}You're Safe — iStrokePredictor{% endblock %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Diagnosis</title>
-</head>
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" style="font-size: 25px; font-weight: bold" href="#">Stroke Risk Diagnosis</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" style="font-size: 25px; font-weight: bold" href="{{ url_for('index') }}">Home</a>
-            </li>
-        </ul>
+{% block content %}
+<div class="page result-page safe">
+  <div class="result-card">
+    <div class="result-card-top">
+      <div class="result-icon safe-icon">✅</div>
+      <h1 class="result-title safe">Low stroke risk</h1>
+      <p class="result-prob">{{ pred }}</p>
+      <div class="prob-bar-wrap">
+        <div class="prob-bar safe" id="probBar" style="width:0%"></div>
+      </div>
+      <p class="result-message" style="margin-top:0.5rem">
+        Based on your inputs, our model predicts a low probability of stroke. Keep up the healthy habits!
+      </p>
     </div>
-</nav>
-    
-    <div class="jumbotron hero-nature bg-#1F86EA">
-        <div class="row" style="margin:15% 0% 0% 10%">
-            <h3 >{{pred}}</h3>
-            
-        <h1 class="hero-title text-3">You have been diagnosed with no Stroke Risk. Congratulations</h1><br><br>
-        <p style="font-size: 30px">The algorithm has diagnosed you with no Stroke Risk based on your inputs.<br><br>However, it might be better to continue practising a healthy life.</p>
+    <div class="result-card-bottom">
+      <h3>Keep your risk low</h3>
+      <ul class="tips-list">
+        <li>Maintain regular blood pressure and glucose checks</li>
+        <li>Stay physically active — at least 30 minutes most days</li>
+        <li>Eat a balanced diet low in salt and saturated fats</li>
+        <li>Avoid smoking and limit alcohol consumption</li>
+        <li>Manage stress through relaxation and good sleep</li>
+      </ul>
     </div>
-    <style>
-    div.jumbotron.hero-nature {
-        color: white;
-        text-align: center;
-        background: url('bg.jpg');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        padding-top: 100px;
-        padding-bottom: 100px;
+    <div class="result-actions">
+      <a href="{{ url_for('predict') }}" class="btn btn-outline">Take assessment again</a>
+      <a href="{{ url_for('manage') }}" class="btn btn-navy">Prevention tips →</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Animate progress bar — extract % from pred string
+  window.addEventListener('load', function() {
+    const pred = "{{ pred }}";
+    const match = pred.match(/([\d.]+)%/);
+    if (match) {
+      setTimeout(() => {
+        document.getElementById('probBar').style.width = match[1] + '%';
+      }, 300);
     }
-
-    body {
-      background-color: #1F86EA;
-    }
-
-    .col-lg-4 {
-        color: #ffffff;
-    }
-    </style>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-
-</html>
-
+  });
+</script>
+{% endblock %}

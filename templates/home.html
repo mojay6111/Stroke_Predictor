@@ -1,161 +1,367 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Stroke Risk Assessment — iStrokePredictor{% endblock %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Home</title>
-</head>
+{% block content %}
+<div class="page predict-page">
+  <div class="predict-container">
 
-<nav class="navbar navbar-dark bg-dark navbar-fixed-top">
-    <a class="navbar-brand" style="font-size: 25px; font-weight: bold" href="#">Stroke Risk Prediction</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" style="font-size: 25px; font-weight: bold" href="{{ url_for('index') }}">Home</a>
-            </li>
-        </ul>
+    <div class="predict-header">
+      <h1>Stroke Risk Assessment</h1>
+      <p>Answer all questions honestly for the most accurate result</p>
     </div>
-</nav>
 
-<body>
-    
-    <div class="container-fluid mt-5 bg-primary">
-        <div class="col-lg-12">
-                <form action="{{ url_for('result') }}" method="post">
-                    <br>
-                    <br>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="gender">gender</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="gender" name="gender" placeholder="1 for Male, 0 for Female">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="age">Age</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="age" name="age" placeholder="Enter your Age">
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-steps">
+        <div class="progress-line" id="progressLine" style="width:0%"></div>
+        <div class="step-dot active" id="dot1">1</div>
+        <div class="step-dot" id="dot2">2</div>
+        <div class="step-dot" id="dot3">3</div>
+        <div class="step-dot" id="dot4">4</div>
+      </div>
+      <div class="progress-labels">
+        <span class="progress-label active" id="lbl1">Personal</span>
+        <span class="progress-label" id="lbl2">Lifestyle</span>
+        <span class="progress-label" id="lbl3">Health</span>
+        <span class="progress-label" id="lbl4">Body</span>
+      </div>
+    </div>
 
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="hypertension">hypertension  </label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="hypertension" name="hypertension" placeholder="1 for Yes, 0 for No">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="heart_disease">heart_disease </label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="heart_disease" name="heart_disease" placeholder="1 for Yes, 0 for No">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="ever_married">ever_married</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="ever_married" name="ever_married" placeholder="1 for Yes, 0 for No">
-                                    
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="work_type">work_type </label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="work_type" name="work_type" placeholder="0 for Govt_job, 1 for Never_worked, 2 for Private, 3 for Self-employed, 4 for children">
-                                    
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="Residence_type">Residence_type</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="Residence_type" name="Residence_type" placeholder="for Urban 1, for Rural 0">
-                            </div>
-                        </div>
-                        <br>
-			            <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="avg_glucose_level">avg_glucose_level</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="avg_glucose_level" name="avg_glucose_level" placeholder="avg_glucose_level">
-                            </div>
-                        </div>
-                        <br>
-			            <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="bmi">bmi</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="bmi" name="bmi" placeholder="bmi">
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <label for="smoking_status">smoking_status</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8">
-                                <input type="text" style="font-size: 20px" class="form-control" id="smoking_status" name="smoking_status" placeholder="0 for Unknown, 1 for formerly smoked, 2 for never smoked, 3 for smokes">
-                            </div>
-                        </div>
-                        <br>
-                        
-                        <br>
-                        <br>
-                        <center>
-                            <button type="submit" class="btn btn-dark" style="font-size: 20px" value="submit">Submit</button>
-                        </center>
-                </form>
-            </div>
+    <form action="{{ url_for('result') }}" method="POST" id="predictForm">
+
+      <!-- Step 1: Personal info -->
+      <div class="step-card" id="step1">
+        <div class="step-card-header">
+          <h2>Personal information</h2>
+          <p>Basic demographic details</p>
         </div>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-<style>
-body {
-    background-color:  #1F86EA;
+        <div class="step-card-body">
+
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="gender" value="Male" required> Male
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="gender" value="Female"> Female
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="age">Age <span class="hint">(years)</span></label>
+            <div class="input-with-unit">
+              <input type="number" class="form-control" id="age" name="age"
+                     min="1" max="120" placeholder="e.g. 45" required>
+              <span class="input-unit">yrs</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ever married?</label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="ever_married" value="Yes" required> Yes
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="ever_married" value="No"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="Residence_type">Residence type</label>
+            <select class="form-select" id="Residence_type" name="Residence_type" required>
+              <option value="" disabled selected>Select your residence type</option>
+              <option value="Urban">Urban</option>
+              <option value="Rural">Rural</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="step-nav">
+          <span class="step-counter">Step 1 of 4</span>
+          <button type="button" class="btn btn-primary" onclick="goTo(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Lifestyle -->
+      <div class="step-card" id="step2" style="display:none">
+        <div class="step-card-header">
+          <h2>Lifestyle</h2>
+          <p>Your work and smoking habits</p>
+        </div>
+        <div class="step-card-body">
+
+          <div class="form-group">
+            <label class="form-label" for="work_type">Work type</label>
+            <select class="form-select" id="work_type" name="work_type" required>
+              <option value="" disabled selected>Select your work type</option>
+              <option value="Private">Private sector</option>
+              <option value="Self-employed">Self-employed</option>
+              <option value="Govt_job">Government job</option>
+              <option value="children">Child / Student</option>
+              <option value="Never_worked">Never worked</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Smoking status</label>
+            <select class="form-select" name="smoking_status" required>
+              <option value="" disabled selected>Select your smoking status</option>
+              <option value="never smoked">Never smoked</option>
+              <option value="formerly smoked">Formerly smoked</option>
+              <option value="smokes">Currently smoking</option>
+              <option value="Unknown">Prefer not to say</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+          <span class="step-counter">Step 2 of 4</span>
+          <button type="button" class="btn btn-primary" onclick="goTo(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Medical history -->
+      <div class="step-card" id="step3" style="display:none">
+        <div class="step-card-header">
+          <h2>Medical history</h2>
+          <p>Existing conditions and diagnoses</p>
+        </div>
+        <div class="step-card-body">
+
+          <div class="form-group">
+            <label class="form-label">Do you have hypertension? <span class="hint">(high blood pressure)</span></label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="hypertension" value="1" required> Yes
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="hypertension" value="0"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Do you have heart disease?</label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="heart_disease" value="1" required> Yes
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heart_disease" value="0"> No
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="avg_glucose_level">
+              Average glucose level <span class="hint">(mg/dL)</span>
+            </label>
+            <div class="input-with-unit">
+              <input type="number" step="0.1" class="form-control" id="avg_glucose_level"
+                     name="avg_glucose_level" min="50" max="300"
+                     placeholder="e.g. 100" required>
+              <span class="input-unit">mg/dL</span>
+            </div>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;">Normal fasting: 70–100 mg/dL. Check your last lab report.</p>
+          </div>
+
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+          <span class="step-counter">Step 3 of 4</span>
+          <button type="button" class="btn btn-primary" onclick="goTo(4)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Body measurements + BMI calculator -->
+      <div class="step-card" id="step4" style="display:none">
+        <div class="step-card-header">
+          <h2>Body measurements</h2>
+          <p>Your BMI is a key stroke risk indicator</p>
+        </div>
+        <div class="step-card-body">
+
+          <!-- BMI calculator -->
+          <div class="bmi-calc">
+            <div class="bmi-calc-title" onclick="toggleBmi(this)" id="bmiToggle">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Don't know your BMI? Calculate it here
+              <svg style="margin-left:auto" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="bmi-calc-body" id="bmiCalcBody">
+              <div class="bmi-inputs">
+                <div>
+                  <label>Height</label>
+                  <div style="display:flex;gap:0.5rem">
+                    <input type="number" id="calcHeight" placeholder="e.g. 170" min="50" max="250" oninput="calcBmi()">
+                    <select id="heightUnit" style="width:80px;padding:0.7rem 0.5rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:white;font-family:var(--font-body)" onchange="calcBmi()">
+                      <option value="cm">cm</option>
+                      <option value="ft">ft</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label>Weight</label>
+                  <div style="display:flex;gap:0.5rem">
+                    <input type="number" id="calcWeight" placeholder="e.g. 70" min="10" max="300" oninput="calcBmi()">
+                    <select id="weightUnit" style="width:80px;padding:0.7rem 0.5rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:white;font-family:var(--font-body)" onchange="calcBmi()">
+                      <option value="kg">kg</option>
+                      <option value="lbs">lbs</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="bmi-result" id="bmiResult" style="display:none">
+                <div>
+                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.25rem">Your BMI</div>
+                  <div class="bmi-number" id="bmiValue">—</div>
+                </div>
+                <span class="bmi-category" id="bmiCategory">—</span>
+              </div>
+              <button type="button" class="bmi-use-btn" id="bmiUseBtn" style="display:none" onclick="useBmi()">
+                Use this BMI value →
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bmi">BMI value</label>
+            <div class="input-with-unit">
+              <input type="number" step="0.1" class="form-control" id="bmi" name="bmi"
+                     min="10" max="70" placeholder="e.g. 24.5" required>
+              <span class="input-unit">kg/m²</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn btn-ghost" onclick="goTo(3)">← Back</button>
+          <span class="step-counter">Step 4 of 4</span>
+          <button type="submit" class="btn btn-primary">Get my result →</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentStep = 1;
+
+function goTo(step) {
+  // Validate current step before advancing
+  if (step > currentStep) {
+    const current = document.getElementById('step' + currentStep);
+    const inputs = current.querySelectorAll('input[required], select[required]');
+    let valid = true;
+    inputs.forEach(inp => {
+      if (inp.type === 'radio') {
+        const group = current.querySelectorAll(`input[name="${inp.name}"]`);
+        const checked = Array.from(group).some(r => r.checked);
+        if (!checked) { valid = false; inp.closest('.radio-group').style.outline = '2px solid var(--coral)'; }
+        else { inp.closest('.radio-group').style.outline = 'none'; }
+      } else if (!inp.value) {
+        valid = false;
+        inp.style.borderColor = 'var(--coral)';
+      } else {
+        inp.style.borderColor = '';
+      }
+    });
+    if (!valid) return;
+  }
+
+  document.getElementById('step' + currentStep).style.display = 'none';
+  document.getElementById('step' + step).style.display = 'block';
+  currentStep = step;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-.col-lg-4 {
-    color: #ffffff;
+function updateProgress() {
+  const pct = [(0), (33), (66), (100)][currentStep - 1];
+  document.getElementById('progressLine').style.width = pct + '%';
+
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.classList.remove('active', 'done');
+    lbl.classList.remove('active');
+    if (i < currentStep) { dot.classList.add('done'); dot.innerHTML = '✓'; }
+    else if (i === currentStep) { dot.classList.add('active'); dot.innerHTML = i; lbl.classList.add('active'); }
+    else { dot.innerHTML = i; }
+  }
 }
-</style>
 
-</html>
+// Radio card visual selection
+document.querySelectorAll('.radio-card input').forEach(radio => {
+  radio.addEventListener('change', function() {
+    document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+      r.closest('.radio-card').classList.remove('selected');
+    });
+    this.closest('.radio-card').classList.add('selected');
+    this.closest('.radio-group').style.outline = 'none';
+  });
+});
 
+// BMI calculator
+function toggleBmi(el) {
+  const body = document.getElementById('bmiCalcBody');
+  body.classList.toggle('open');
+  el.classList.toggle('open');
+  // Change + to × when open
+  const svg = el.querySelector('svg:first-child');
+  if (body.classList.contains('open')) {
+    svg.innerHTML = '<path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+  } else {
+    svg.innerHTML = '<path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+  }
+}
 
+function calcBmi() {
+  let h = parseFloat(document.getElementById('calcHeight').value);
+  let w = parseFloat(document.getElementById('calcWeight').value);
+  const hu = document.getElementById('heightUnit').value;
+  const wu = document.getElementById('weightUnit').value;
+
+  if (!h || !w) { document.getElementById('bmiResult').style.display = 'none'; document.getElementById('bmiUseBtn').style.display = 'none'; return; }
+
+  if (hu === 'ft') h = h * 30.48;
+  if (wu === 'lbs') w = w * 0.453592;
+
+  const hm = h / 100;
+  const bmi = (w / (hm * hm)).toFixed(1);
+
+  let cat = '', catClass = '';
+  if (bmi < 18.5) { cat = 'Underweight'; catClass = 'bmi-cat-underweight'; }
+  else if (bmi < 25) { cat = 'Normal weight'; catClass = 'bmi-cat-normal'; }
+  else if (bmi < 30) { cat = 'Overweight'; catClass = 'bmi-cat-overweight'; }
+  else { cat = 'Obese'; catClass = 'bmi-cat-obese'; }
+
+  document.getElementById('bmiValue').textContent = bmi;
+  const catEl = document.getElementById('bmiCategory');
+  catEl.textContent = cat;
+  catEl.className = 'bmi-category ' + catClass;
+  document.getElementById('bmiResult').style.display = 'flex';
+  document.getElementById('bmiUseBtn').style.display = 'block';
+}
+
+function useBmi() {
+  const val = document.getElementById('bmiValue').textContent;
+  document.getElementById('bmi').value = val;
+  // Close the calculator
+  document.getElementById('bmiCalcBody').classList.remove('open');
+  document.getElementById('bmiToggle').classList.remove('open');
+}
+</script>
+{% endblock %}

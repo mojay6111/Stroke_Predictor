@@ -1,93 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Prevention — iStrokePredictor{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link/>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <title>Document</title>
-</head>
+{% block content %}
+<div class="info-page">
+  <div class="info-hero">
+    <h1>Preventing stroke</h1>
+    <p>Up to 80% of strokes are preventable. Small, consistent lifestyle changes make a significant difference.</p>
+  </div>
 
-    <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" style="font-size: 25px; font-weight: bold" href="{{ url_for('index') }}">Home</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="container-fluid">
-        <div class=" mt-5 text-center">
-            <h2 style="color: #042331; ">MANAGE</h2>
-            <p class="fs-4">These are the most important steps you can take to lower your risk of stroke:</p>
-        </div>
-        <div class="row text-center text-light mt-3">
-            <div class="col-lg-4">
-                <div class="card shadow-lg " style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                                 <h4>Healthy diet</h4>
-                        <img class="rounded-circle img-fluid w-50" src="{{ url_for('static',filename='images/diet.jpg') }}">
-                        <p class="fs-5">The quality and quantity of food taken depends on what one can afford, its availability and where you live. Choosing healthy meal and snack options can help you prevent stroke. Be sure to eat plenty of fresh fruits and vegetables.Eating foods low in saturated fats, trans fat, and cholesterol and high in fiber can help prevent high cholesterol. Limiting salt (sodium) in your diet can also lower your blood pressure. High cholesterol and high blood pressure increase your chances of having a stroke.</p>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card shadow-lg" style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                        <h4>Excessive psychological stress</h4>
-                         <img class="rounded-circle img-fluid w-50" src="{{ url_for('static',filename='images/stress.jpg') }}">
-                        <p class="fs-5">Stress can cause the heart to work harder, increase blood pressure, and increase sugar and fat levels in the blood.Hence, increasing the risk of clots forming and travelling to the heart or brain, causing or stroke.The recommendations for managing stress include: Face the problem and do something about it.Engage in activities that keep you calm.Breathing exercises and muscle relaxation.Incase of chronic depression, consult a doctor as soon as possible for treatment.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card shadow-lg" style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                        <h4>Elevated Blood Pressure</h4>
-                         <img class="rounded-circle img-fluid w-75" src="{{ url_for('static',filename='images/bp.jpg') }}">
-                        <p class="fs-5">Monitoring blood pressure and, if it is elevated, treating it, is probably the biggest difference people can make to their vascular health. To achieve it:Reduce the salt intake in your diet. Avoid high-cholesterol foods, such as burgers, cheese, and ice cream. Also, ensure you eat 4 to 5 cups of fruits and vegetables every day, one serving of fish two to thrice a week, several daily servings of whole grains and low-fat dairy.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row text-center text-light mt-3">
-            <div class="col-lg-4">
-                <div class="card shadow-lg" style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                        <h4>Exercise</h4>
-                         <img class="rounded-circle img-fluid w-70" src="{{ url_for('static',filename='images/exercise.jpg') }}">
-                        <p class="fs-5">Combining a healthy diet with regular exercise is the best way to maintain a healthy weight.Exercise plays an important role in reducing several stroke risk factors including hypertension, diabetes, cholesterol, depression and stress. Be getting regular exercise you can take action on a number of stroke risk factors.</p>
-                    </div>
-                </div>
-            </div>
-        <div class="col-lg-4">
-                <div class="card shadow-lg" style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                        <h4>Smoking</h4>
-                         <img class="rounded-circle img-fluid w-75" src="{{ url_for('static',filename='images/smoking.jpg') }}">
-                        <p class="fs-5">Smoking significantly increases your risk of having a stroke.This is because it narrows your arteries and makes your blood more likely to clot.Several ways to quit include:Cutting down over several weeks.Seek advice from a doctor, who may recommend special medications.</p>
-                    </div>
-                </div>
-            </div>
-        <div class="col-lg-4">
-                <div class="card shadow-lg" style="background-color:#042331;">
-                    <div class="card-body bg-primary">
-                        <h4>Diabetes</h4>
-                         <img class="rounded-circle img-fluid w-70" src="{{ url_for('static',filename='images/diabetes.jpg') }}">
-                        <p class="fs-5">People with diabetes should try to keep their blood sugar level to prevent stroke. This can be managed by:Regularly taking prescribed medication and monitoring blood sugar.Follow doctor's advice. Also, a balanced diet is preescribed, and physical activities to maintain weight.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="manage-grid">
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/diet.jpg') }}" alt="Healthy diet">
+      <div class="manage-card-body">
+        <h3>🥗 Healthy diet</h3>
+        <p>Eat plenty of fresh fruits and vegetables. Choose foods low in saturated fats, trans fat, and cholesterol. Limit salt to lower blood pressure — a major stroke risk factor. High cholesterol and high blood pressure significantly increase your risk.</p>
+      </div>
     </div>
-</body>
- <div class="footer text-center bg-primary" >
-     <p class="mt-5 pt-2 pb-2 fs-3">&copy; 2022 iStrokePredictor. Developed by Faith. All rights reserved.</p>
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/exercise.jpg') }}" alt="Exercise">
+      <div class="manage-card-body">
+        <h3>🏃 Regular exercise</h3>
+        <p>Aim for at least 30 minutes of moderate activity most days. Exercise helps reduce hypertension, diabetes, high cholesterol, and stress — all key stroke risk factors. Even a daily walk makes a meaningful difference.</p>
+      </div>
     </div>
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/bp.jpg') }}" alt="Blood pressure">
+      <div class="manage-card-body">
+        <h3>💉 Control blood pressure</h3>
+        <p>High blood pressure is the single biggest modifiable stroke risk factor. Monitor it regularly, reduce salt intake, eat more fruits and vegetables, and take prescribed medication consistently. Target below 120/80 mmHg.</p>
+      </div>
+    </div>
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/smoking.jpg') }}" alt="No smoking">
+      <div class="manage-card-body">
+        <h3>🚭 Stop smoking</h3>
+        <p>Smoking narrows arteries and makes blood more likely to clot, significantly raising stroke risk. Talk to your doctor about cessation support, medications, or nicotine replacement. The benefits begin within hours of quitting.</p>
+      </div>
+    </div>
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/diabetes.jpg') }}" alt="Diabetes management">
+      <div class="manage-card-body">
+        <h3>🩸 Manage diabetes</h3>
+        <p>Keep blood sugar levels within target range through medication, balanced diet, and exercise. Regular monitoring, following your doctor's advice, and maintaining a healthy weight are all critical for people with diabetes.</p>
+      </div>
+    </div>
+    <div class="manage-card">
+      <img src="{{ url_for('static', filename='images/stress.jpg') }}" alt="Stress management">
+      <div class="manage-card-body">
+        <h3>🧘 Manage stress</h3>
+        <p>Chronic stress raises blood pressure and can lead to unhealthy coping habits. Try breathing exercises, regular physical activity, and addressing root causes. Seek professional support for persistent anxiety or depression.</p>
+      </div>
+    </div>
+  </div>
 
-</html>
+  <div style="text-align:center;padding:3rem 5%;background:var(--navy)">
+    <h2 style="font-family:var(--font-display);color:var(--white);font-size:1.8rem;margin-bottom:1rem">
+      Ready to check your risk?
+    </h2>
+    <p style="color:rgba(255,255,255,0.6);margin-bottom:2rem">Our assessment combines all these factors into a personalised risk score.</p>
+    <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">Start assessment →</a>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2024 <span>iStrokePredictor</span>. Built with care for better health outcomes.</p>
+  </footer>
+</div>
+{% endblock %}
